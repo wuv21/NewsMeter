@@ -8,36 +8,38 @@ angular.module('BreadcrumbsApp', ['ui.router', 'ui.bootstrap', 'chart.js'])
             });
         $urlRouterProvider.otherwise('/main');
     })
-    .controller('MainController', function($scope, $state, $http) {
+    .factory('getAlgo', function() {
+        return function(client, algorithim, input) {
+            return new Promise(function(resolve, reject) {
+                client.algo(algorithim)
+                    .pipe(input)
+                    .then(function(output) {
+                        if (output.error) {
+                            reject(Error(console.error("error: " + output.error)));
+                        }
+                        resolve(output.result)
+                    });
+            });
+        };
+    })
+    .controller('MainController', function($scope, $state, $http, getAlgo) {
+        // Connect with scope
         $http.get('json/api_keys.json').success(function(data) {
             var algo_key = data.config.algo;
             $scope.client = Algorithmia.client(algo_key);
 
-            $scope.algoAPIs = {'html2text' : 'algo://util/Html2Text/0.1.3',
+            // algorithim codes for API
+            $scope.algoAPIs = {
+                'html2text' : 'algo://util/Html2Text/0.1.3',
                 'summarizer' : 'algo://nlp/Summarizer/0.1.3',
-                'sentAnalysis' : 'algo://nlp/SentimentAnalysis/0.1.2'};
+                'sentAnalysis' : 'algo://nlp/SentimentAnalysis/0.1.2'
+            };
 
-            // overall fxn - prob will be obsolete due to asyncness
-            //$scope.algoQuery = function(algorithim, input) {
-            //    $scope.client.algo(algorithim)
-            //        .pipe(input)
-            //        .then(function(output) {
-            //            if (output.error) {
-            //                return console.error("error: " + output.error);
-            //            }
-            //            return output.result;
-            //        });
-            //};
-
-            $scope.getText = $scope.client.algo($scope.algoAPIs.html2text)
-                    .pipe("www.algorithmia.com")
-                    .then(function(output) {
-                        if (output.error) {
-                            return console.error("error: " + output.error);
-                        }
-                        console.log(output.result);
-                        return output.result;
-                    });
+            // example running of factory
+            getAlgo($scope.client, $scope.algoAPIs.html2text, 'www.google.com')
+                .then(function(result) {
+                    console.log(result);
+            });
         });
 
     });
