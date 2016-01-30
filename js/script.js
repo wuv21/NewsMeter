@@ -108,7 +108,6 @@ angular.module('BreadcrumbsApp', ['ui.router', 'ui.bootstrap', 'chart.js', 'fire
     })
     .controller('MainController', function($scope, $state, $http, getAlgo, userDetails) {
         $scope.user = userDetails.getUser();
-
         //if ($scope.user.email.length === 0) {
         //    $state.go('main.welcome');
         //}
@@ -131,7 +130,6 @@ angular.module('BreadcrumbsApp', ['ui.router', 'ui.bootstrap', 'chart.js', 'fire
                 s: 0,
                 summary: 'this is the fourth summary'}
         ];
-
         // Connect with scope
         $http.get('json/api_keys.json').success(function (data) {
             var algo_key = data.config.algo;
@@ -145,9 +143,47 @@ angular.module('BreadcrumbsApp', ['ui.router', 'ui.bootstrap', 'chart.js', 'fire
             };
 
             // example running of factory
-            //getAlgo($scope.client, $scope.algoAPIs.html2text, 'www.google.com')
-            //    .then(function(result) {
-            //        console.log(result);
-            //});
+            // getAlgo($scope.client, $scope.algoAPIs.html2text, 'www.google.com')
+            //     .then(function(result) {
+            //         console.log(result);
+            // });
+
+            getNewsUrls()
+                .then(function (urls) {
+                    // console.log(urls)
+                    //turn to text, then evaluate 
+                    var part = [];                        
+                    for (var i = 0; i < 10; i++) {
+                        part.push(urls[i]);
+                    }    
+                    prepData(part)
+                        .then(function (data) {
+                            console.log(data);
+                        })
+                });
+
+            function prepData(urls) {
+                var sequence = Promise.resolve();
+                return new Promise(function (resolve, reject) {
+                    var proms = urls.map(function (url) {
+                        return sequence.then(function () {
+                            return getAlgo($scope.client, $scope.algoAPIs.html2text, url);
+                        })
+                        .then(function (text) {
+                            return getAlgo($scope.client, $scope.algoAPIs.sentAnalysis, text);
+                        })
+                        .then(function (sentiment) {
+                            return {
+                                url: url,
+                                sentiment: sentiment
+                            }
+                        });
+                    });
+                    Promise.all(proms)
+                        .then(function (data) {
+                            resolve(data);
+                        });
+                });
+            }
         });
-    });
+    });        
