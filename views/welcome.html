@@ -1,0 +1,40 @@
+<div class="container body-start">
+    <h1 class="text-center">Welcome to Project EV</h1>
+
+    <h2>About</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Delectus earum facere impedit itaque nihil officia perspiciatis reiciendis sed soluta voluptatem? Amet at autem dignissimos, ducimus labore perferendis quos repudiandae. Quas.</p>
+
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci autem cumque distinctio earum harum, itaque modi mollitia, necessitatibus neque nulla perferendis quaerat quia quibusdam quisquam recusandae, repellat repellendus rerum sed!</p>
+
+    <h2>Want to get started?</h2>
+    <p>Please fill out the form below to get started</p>
+
+    <form name="signUpForm" ng-model="user" class="well">
+        <div class="form-group">
+            <label for="emailInput">Email</label>
+            <input type="email" class="form-control" name="emailInput" id="emailInput" placeholder="Email" ng-model="user.email" required>
+
+            <p class="validation-error" id="emailValidAlert"
+               ng-if="signUpForm.emailInput.$dirty && signUpForm.emailInput.$error.email && !signUpForm.emailInput.$error.required">Please enter a valid e-mail</p>
+            <p class="validation-error" id="emailReqAlert"
+               ng-if="signUpForm.emailInput.$dirty && signUpForm.emailInput.$error.required">Please enter an e-mail</p>
+        </div>
+
+        <div class="form-group">
+            <label for="pwdInput">Password</label>
+            <input type="password" class="form-control" name="pwdInput" id="pwdInput" placeholder="Password" ng-model="user.pwd" required>
+
+            <p class="validation-error" id="pwdReqAlert"
+               ng-if="signUpForm.pwdInput.$dirty && signUpForm.pwdInput.$error.required">Please enter a password</p>
+        </div>
+
+        <div class="row">
+
+        </div>
+        <div class="form-group">
+            <p><button ng-disabled="signUpForm.$invalid" class="btn btn-success" ng-click="signup()">Sign up</button> or
+                <button ng-disabled="signUpForm.$invalid" class="btn btn-primary" ng-click="signin()">Sign in</button></p>
+        </div>
+
+    </form>
+</div>

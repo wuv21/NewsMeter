@@ -42,11 +42,35 @@ angular.module('BreadcrumbsApp', ['ui.router', 'ui.bootstrap', 'chart.js', 'fire
             .state('main', {
                 url: '/main',
                 templateUrl: 'views/main.html',
+                controller: 'MasterController'
+            })
+            .state('main.welcome', {
+                url: '/welcome',
+                templateUrl: 'views/welcome.html',
+                controller: 'LoginController'
+            })
+            .state('main.user', {
+                url: '/user',
+                templateUrl: 'views/user.html',
                 controller: 'MainController'
             });
-        $urlRouterProvider.otherwise('/main');
+        $urlRouterProvider.otherwise('/main/welcome');
     })
+    .service('userDetails', function() {
+        var user = {
+            email: '',
+            password: ''
+        };
 
+        return {
+            getUser: function() {
+                return user;
+            },
+            setUser: function(value) {
+                user = value;
+            }
+        }
+    })
     .factory('getAlgo', function() {
         return function(client, algorithim, input) {
             return new Promise(function(resolve, reject) {
@@ -61,22 +85,46 @@ angular.module('BreadcrumbsApp', ['ui.router', 'ui.bootstrap', 'chart.js', 'fire
             });
         };
     })
-    .controller('MainController', function($scope, $state, $http, getAlgo) {
+    .controller('MasterController', function($scope, $state) {
+        // navbar collapse code
+        $scope.isCollapsed = true;
+    })
+    .controller('LoginController', function($scope, $state, userDetails) {
+        // login
+        $scope.user = {};
+        $scope.loginSuccess = false;
+
+        userDetails.setUser($scope.user);
+
+        $scope.signup = function() {
+            console.log('signed up clicked');
+            $state.go('main.user');
+        };
+
+        $scope.signin = function() {
+            console.log('signed in clicked');
+            $state.go('main.user');
+        };
+    })
+    .controller('MainController', function($scope, $state, $http, getAlgo, userDetails) {
+        $scope.user = userDetails.getUser();
+
         // Connect with scope
-        $http.get('json/api_keys.json').success(function(data) {
+        $http.get('json/api_keys.json').success(function (data) {
             var algo_key = data.config.algo;
             $scope.client = Algorithmia.client(algo_key);
 
             // algorithim codes for API
             $scope.algoAPIs = {
-                'html2text' : 'algo://util/Html2Text/0.1.3',
-                'summarizer' : 'algo://nlp/Summarizer/0.1.3',
-                'sentAnalysis' : 'algo://nlp/SentimentAnalysis/0.1.2'
+                'html2text': 'algo://util/Html2Text/0.1.3', // takes in url
+                'summarizer': 'algo://nlp/Summarizer/0.1.3', // takes in string
+                'sentAnalysis': 'algo://nlp/SentimentAnalysis/0.1.2' // takes in string
             };
 
             // example running of factory
-            getAlgo($scope.client, $scope.algoAPIs.html2text, 'www.google.com')
-                .then(function(result) {
-                    console.log(result);
-            });
+            //getAlgo($scope.client, $scope.algoAPIs.html2text, 'www.google.com')
+            //    .then(function(result) {
+            //        console.log(result);
+            //});
         });
+    });
