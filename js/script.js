@@ -4,7 +4,11 @@ angular.module('BreadcrumbsApp', ['ui.router', 'ui.bootstrap', 'chart.js', 'fire
         function getURL(id) {
             return new Promise(function (resolve, reject) {
                 hackerNewsRef.child('item').child(id).on('value', function (snapshot) {
-                    resolve(snapshot.val().url);
+                    var value = snapshot.val();
+                    resolve({
+                        url: value.url,
+                        title: value.title
+                    });
                 });
             });
         }
@@ -106,7 +110,7 @@ angular.module('BreadcrumbsApp', ['ui.router', 'ui.bootstrap', 'chart.js', 'fire
             $state.go('main.user');
         };
     })
-    .controller('MainController', function($scope, $state, $http, getAlgo, userDetails) {
+    .controller('MainController', function($scope, $state, $http, getAlgo, userDetails, getNewsUrls) {
         $scope.user = userDetails.getUser();
         //if ($scope.user.email.length === 0) {
         //    $state.go('main.welcome');
@@ -158,24 +162,26 @@ angular.module('BreadcrumbsApp', ['ui.router', 'ui.bootstrap', 'chart.js', 'fire
                     }    
                     prepData(part)
                         .then(function (data) {
-                            console.log(data);
+                            console.log(data)
                         })
                 });
 
             function prepData(urls) {
                 var sequence = Promise.resolve();
                 return new Promise(function (resolve, reject) {
-                    var proms = urls.map(function (url) {
+                    var proms = urls.map(function (obj) {
                         return sequence.then(function () {
-                            return getAlgo($scope.client, $scope.algoAPIs.html2text, url);
+                            return getAlgo($scope.client, $scope.algoAPIs.html2text, obj.url);
                         })
                         .then(function (text) {
                             return getAlgo($scope.client, $scope.algoAPIs.sentAnalysis, text);
                         })
                         .then(function (sentiment) {
                             return {
-                                url: url,
-                                sentiment: sentiment
+                                title: obj.title,
+                                url: obj.url,
+                                sentiment: sentiment,
+                                summary: ''
                             }
                         });
                     });
