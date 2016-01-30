@@ -1,3 +1,31 @@
 <div class="container body-start">
-    <h1>Welcome {{user.email}}</h1>
+    <h1 class="text-center">Welcome {{user.email}}</h1>
+
+    <h2>Details</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet dolores ea earum illo labore necessitatibus quibusdam quis voluptate? Adipisci animi asperiores et hic ipsa iusto, labore non obcaecati praesentium veritatis.</p>
+
+    <h2>Sentiment rating</h2>
+    <div class="text-center sentiment-color">
+        <div class="row">
+            <div class="col-xs-2">
+                <p>0</p>
+                <p>Very negative</p>
+            </div>
+            <div class="col-xs-8">
+
+            </div>
+            <div class="col-xs-2">
+                <p>4</p>
+                <p>Very positive</p>
+            </div>
+        </div>
+    </div>
+
+    <h2>Stories</h2>
+    <div ng-repeat="story in sample">
+        <div class="col-md-4">
+            <h3>{{story.title}}</h3>
+            <p>{{story.summary}}</p>
+        </div>
+    </div>
 </div>
