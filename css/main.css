@@ -16,3 +16,16 @@ body {
 h1, h2, h3 {
     font-weight: 300;
 }
+
+.validation-error {
+    color: #dd1531;
+    font-size: 0.8em;
+}
+
+form .ng-dirty.ng-invalid {
+    border: 1px solid #dd1531;
+}
+
+form .ng-dirty.ng-valid {
+    border: 1px solid #00DD00;
+}
