@@ -150,14 +150,18 @@ angular.module('BreadcrumbsApp', ['ui.router', 'ui.bootstrap', 'chart.js', 'fire
                             return getAlgo($scope.client, $scope.algoAPIs.html2text, obj.url);
                         })
                         .then(function (text) {
-                            return getAlgo($scope.client, $scope.algoAPIs.sentAnalysis, text);
+                            return {
+                                sentiment: getAlgo($scope.client, $scope.algoAPIs.sentAnalysis, text),
+                                text: text
+                            }
                         })
-                        .then(function (sentiment) {
+                        .then(function (data) {
                             return {
                                 title: obj.title,
                                 url: obj.url,
-                                sentiment: sentiment,
-                                summary: ''
+                                sentiment: data.sentiment,
+                                summary: '',
+                                text: data.text
                             }
                         });
                     });
