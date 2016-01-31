@@ -162,19 +162,23 @@ angular.module('BreadcrumbsApp', ['ui.router', 'ui.bootstrap', 'chart.js', 'fire
                             return getAlgo($scope.client, $scope.algoAPIs.html2text, obj.url);
                         })
                         .then(function (text) {
-                            return {
-                                sentiment: getAlgo($scope.client, $scope.algoAPIs.sentAnalysis, text),
-                                text: text
-                            }
+                            return new Promise(function (resolve, reject) {
+                                resolve({
+                                    sentiment: getAlgo($scope.client, $scope.algoAPIs.sentAnalysis, text),
+                                    summary: getAlgo($scope.client, $scope.algoAPIs.summarizer, text)
+                                });
+                            });
                         })
-                        .then(function (data) {
-                            return {
-                                title: obj.title,
-                                url: obj.url,
-                                sentiment: data.sentiment,
-                                summary: '',
-                                text: data.text
-                            }
+                        .then(function (data) {                            
+                            return Promise.all([data.sentiment, data.summary])
+                                .then(function (data) {
+                                    return {
+                                        title: obj.title,
+                                        url: obj.url,
+                                        sentiment: data[0],
+                                        summary: data[1]
+                                    }
+                                })                            
                         });
                     });
                     Promise.all(proms)

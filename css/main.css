@@ -67,3 +67,7 @@ form .ng-dirty.ng-valid {
 .spinner {
     text-align: center;
 }
+
+.articles {
+    margin-bottom: 20px;
+}
