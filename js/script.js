@@ -125,21 +125,33 @@ angular.module('BreadcrumbsApp', ['ui.router', 'ui.bootstrap', 'chart.js', 'fire
                 'summarizer': 'algo://nlp/Summarizer/0.1.3', // takes in string
                 'sentAnalysis': 'algo://nlp/SentimentAnalysis/0.1.2' // takes in string
             };
+            $scope.show = true;
 
             getNewsUrls()
                 .then(function (urls) {
                     // console.log(urls)
                     //turn to text, then evaluate 
-                    var part = [];                        
-                    for (var i = 0; i < 2; i++) {
-                        part.push(urls[i]);
-                    }    
-                    prepData(part)
-                        .then(function (data) {
-                            $scope.stories = data;
-                            $scope.$apply();
-                            console.log(data);
-                        })
+                    var data = localStorage.getItem('data');
+
+                    if (data) {
+                        console.log(JSON.parse(data));
+                        $scope.stories = JSON.parse(data);
+                        $scope.show = false;
+                        $scope.$apply();
+                    } else {                    
+                        var part = [];                        
+                        for (var i = 0; i < 20; i++) {
+                            part.push(urls[i]);
+                        }    
+                        prepData(part)
+                            .then(function (data) {
+                                $scope.stories = data;
+                                $scope.show = false;
+                                $scope.$apply();
+                                console.log(data);
+                                localStorage.setItem('data', JSON.stringify(data));
+                            });
+                    }                    
                 });
 
             function prepData(urls) {
