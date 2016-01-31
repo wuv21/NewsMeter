@@ -34,7 +34,7 @@
         <div class="articles" ng-repeat="story in stories">
             <div class="sentiment sentiment-{{story.sentiment}} ">
                 <h4><a href="{{story.url}}" target="_blank">{{story.title}}</a></h4>
-                <p>{{story.sentiment}} <i class="fa fa-smile-o"></i></p>
+                <p>Sentiment rating: {{story.sentiment || "N/A"}}</p>
                 <p>{{story.summary}}</p>
             </div>
         </div>
