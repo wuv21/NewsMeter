@@ -63,3 +63,7 @@ form .ng-dirty.ng-valid {
 .sentiment-4 {
     border-left: 3px solid #3CE78B;
 }
+
+.spinner {
+    text-align: center;
+}
