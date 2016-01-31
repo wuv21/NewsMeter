@@ -31,5 +31,35 @@ form .ng-dirty.ng-valid {
 }
 
 .sentiment-color {
-    background: linear-gradient(to right, rgba(142, 40, 0, 0.7) , rgba(70, 137, 102, 0.7)); /* Standard syntax */
+    color: #FFF;
+    padding-top: 0.3em;
+    padding-bottom: 0.3em;
+    background: linear-gradient(to right, rgba(154, 37, 25, 1) , rgba(60, 231, 139, 1)); /* Standard syntax */
+}
+
+#motto {
+    cursor: default;
+}
+
+.sentiment {
+    padding-left: 8px;
+}
+
+.sentiment- {
+    border-left: 3px solid #EEE;
+}
+.sentiment-0 {
+    border-left: 3px solid #9A2519;
+}
+.sentiment-1 {
+    border-left: 3px solid #E74C3C;
+}
+.sentiment-2 {
+    border-left: 3px solid #FF6B5C;
+}
+.sentiment-3 {
+    border-left: 3px solid #099A4D;
+}
+.sentiment-4 {
+    border-left: 3px solid #3CE78B;
 }

@@ -89,9 +89,10 @@ angular.module('BreadcrumbsApp', ['ui.router', 'ui.bootstrap', 'chart.js', 'fire
             });
         };
     })
-    .controller('MasterController', function($scope, $state) {
+    .controller('MasterController', function($scope, $state, userDetails) {
         // navbar collapse code
         $scope.isCollapsed = true;
+
     })
     .controller('LoginController', function($scope, $state, userDetails) {
         // login
@@ -112,28 +113,7 @@ angular.module('BreadcrumbsApp', ['ui.router', 'ui.bootstrap', 'chart.js', 'fire
     })
     .controller('MainController', function($scope, $state, $http, getAlgo, userDetails, getNewsUrls) {
         $scope.user = userDetails.getUser();
-        //if ($scope.user.email.length === 0) {
-        //    $state.go('main.welcome');
-        //}
 
-        $scope.sample = [
-            {title: 'This is the title',
-                url: 'sample url address',
-                s: 3,
-                summary: 'this is the summary'},
-            {title: 'This is the second title',
-                url: 'sample url address',
-                s: 2,
-                summary: 'this is the second summary'},
-            {title: 'This is the third title',
-                url: 'sample url address',
-                s: 1,
-                summary: 'this is the third summary'},
-            {title: 'This is the fourth title',
-                url: 'sample url address',
-                s: 0,
-                summary: 'this is the fourth summary'}
-        ];
         // Connect with scope
         $http.get('json/api_keys.json').success(function (data) {
             var algo_key = data.config.algo;
@@ -146,23 +126,19 @@ angular.module('BreadcrumbsApp', ['ui.router', 'ui.bootstrap', 'chart.js', 'fire
                 'sentAnalysis': 'algo://nlp/SentimentAnalysis/0.1.2' // takes in string
             };
 
-            // example running of factory
-            // getAlgo($scope.client, $scope.algoAPIs.html2text, 'www.google.com')
-            //     .then(function(result) {
-            //         console.log(result);
-            // });
-
             getNewsUrls()
                 .then(function (urls) {
                     // console.log(urls)
                     //turn to text, then evaluate 
                     var part = [];                        
-                    for (var i = 0; i < 10; i++) {
+                    for (var i = 0; i < 2; i++) {
                         part.push(urls[i]);
                     }    
                     prepData(part)
                         .then(function (data) {
-                            console.log(data)
+                            $scope.stories = data;
+                            $scope.$apply();
+                            console.log(data);
                         })
                 });
 
