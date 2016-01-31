@@ -1,8 +1,8 @@
 <div class="container body-start">
     <h1 class="text-center">Welcome {{user.email}}</h1>
 
-    <h2>What is News Meter?</h2>
-    <p>If news articles were alive, what would their emotions be? Fortunately for us, we have Algorithmia to provide sentiment analysis from news articles (kindly provided by Hacker News).</p>
+    <h2>What is SASS-N?</h2>
+    <p>If news articles were alive, what would their emotions be? Fortunately for us, we have Algorithmia to provide sentiment analysis from news articles (kindly provided by Hacker News). Sentimental Analytical Smart System for News (SASS-N) can do all of this and more.</p>
 
     <h2>Why is it important?</h2>
     <p>The potential for evalutating the sentimentality of news articles is boundless. You can gain a sense of the degree of the mood for the day. Interested in predicting the stock market? The pattern of sentiments over time in correlation with the stock market trends can be a treasure trove of information. The sky is the limit.</p>
@@ -10,7 +10,7 @@
     <h2>How does it work?</h2>
     <p>From Hacker News' API, we gain vast amounts of data about news articles with URLs. Using these URLs, we utilize Algorithmia's Html2Text algorithm to get the general text. The fun part occurs when this text then gets passed into Algorithmia's Sentiment Analysis algorithm - gaining a rating of the emotional value.</p>
 
-    <h2>Sentiment rating</h2>
+    <h2>Sentiment rating legend for SASS-N</h2>
     <div class="text-center sentiment-color">
         <div class="row">
             <div class="col-xs-2">
@@ -28,9 +28,12 @@
 
     <h2>Stories</h2>
         <p>Note: Load times are normal. Please hold on as the data is prepared for you! In the mean time - take a moment and say hi to a friend!</p>
+        <h1 class="spinner" ng-if="show">
+            <i class="fa fa-spinner fa-pulse"></i>
+        </h1>
         <div ng-repeat="story in stories">
             <div class="sentiment sentiment-{{story.sentiment}} ">
-                <h3><a href="{{story.url}}" target="_blank">{{story.title}}</a></h3>
+                <h4><a href="{{story.url}}" target="_blank">{{story.title}}</a></h4>
                 <p>{{story.sentiment}} <i class="fa fa-smile-o"></i></p>
             </div>
         </div>
